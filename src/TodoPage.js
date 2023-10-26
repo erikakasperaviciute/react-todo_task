@@ -1,17 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TodoForm from "./Components/TodoForm";
 import TodoList from "./Components/TodoList";
+import { API_URL } from "./config";
+import axios from "axios";
 
 function TodoPage() {
-  const todosData = [];
+  // const todosData = [];
 
-  const [todos, setTodos] = useState(todosData);
+  // const [todos, setTodos] = useState(todosData);
+
+  const [todos, setTodos] = useState([]);
   const [editTodo, setEditTodo] = useState(null);
 
-  const newTodoHandler = (newTodo) => {
+  useEffect(() => {
+    const getTodos = async () => {
+      const { data } = await axios(`${API_URL}/todos`);
+      setTodos(data);
+    };
+    getTodos();
+  }, []);
+
+  const newTodoHandler = async (newTodo) => {
     if (editTodo) {
+      console.log(editTodo);
+      await axios.put(`${API_URL}/todos/${editTodo.id}`, newTodo);
+      console.log(editTodo.id);
       setTodos((prevTodos) => {
-        const editId = newTodo.id;
+        const editId = editTodo.id;
         const editIndex = todos.findIndex((todo) => todo.id === editId);
         const newState = [...prevTodos];
         newState[editIndex] = newTodo;
@@ -19,9 +34,27 @@ function TodoPage() {
       });
       setEditTodo(null);
     } else {
-      setTodos((prevTodos) => [newTodo, ...prevTodos]);
+      const { data } = await axios.post(`${API_URL}/todos`, newTodo);
+      setTodos((prevTodos) => [data, ...prevTodos]);
     }
   };
+
+  //   const newTodoHandler = (newTodo) => {
+  //     if (editTodo) {
+  //       setTodos((prevTodos) => {
+  //         const updatedTodos = prevTodos.map((item) => {
+  //           if (item.id === newTodo.id) {
+  //             return newTodo;
+  //           }
+  //           return item;
+  //         });
+  //         return updatedTodos;
+  //       });
+  //       setEditTodo(null);
+  //     } else {
+  //       setTodos((prevTodos) => [newTodo, ...prevTodos]);
+  //     }
+  //   };
 
   const editTodoHandler = (todoId) => {
     const todoToEdit = todos.find((todo) => todo.id === todoId);
@@ -29,20 +62,27 @@ function TodoPage() {
   };
 
   const deleteTodoHandler = (todoId) => {
+    axios.delete(`${API_URL}/todos/${todoId}`);
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
   };
 
-  const doneTodoHandler = (todoId) => {
+  const doneTodoHandler = async (todoId) => {
     const clickedTodoIndex = todos.findIndex((todo) => todo.id === todoId);
+    const clickedTodo = todos[clickedTodoIndex];
 
-    setTodos((prevState) => {
-      const newState = [...prevState];
-      const clickedTodo = newState[clickedTodoIndex];
+    if (clickedTodo) {
       const updatedTodo = { ...clickedTodo };
       updatedTodo.done = !updatedTodo.done;
-      newState[clickedTodoIndex] = updatedTodo;
-      return newState;
-    });
+      await axios.put(`${API_URL}/todos/${todoId}`, updatedTodo);
+      setTodos((prevState) => {
+        const newState = [...prevState];
+        // const clickedTodo = newState[clickedTodoIndex];
+        // const updatedTodo = { ...clickedTodo };
+        // updatedTodo.done = !updatedTodo.done;
+        newState[clickedTodoIndex] = updatedTodo;
+        return newState;
+      });
+    }
   };
 
   const sortedTodos = [...todos].sort((a, b) => {

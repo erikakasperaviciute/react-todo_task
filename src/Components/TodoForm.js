@@ -1,4 +1,4 @@
-import { v4 as uuid } from "uuid";
+// import { v4 as uuid } from "uuid";
 import { useState, useEffect } from "react";
 
 function TodoForm(props) {
@@ -21,7 +21,7 @@ function TodoForm(props) {
     e.preventDefault();
 
     const newTodo = {
-      id: editTodo ? editTodo.id : uuid(),
+      // id: editTodo ? editTodo.id : uuid(),
       creationDate: editTodo
         ? editTodo.creationDate
         : new Date().toLocaleString("lt-LT"),

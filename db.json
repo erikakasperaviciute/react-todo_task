@@ -2,21 +2,12 @@
   "todos": [
     {
       "creationDate": "2023-10-26 15:03:09",
-      "title": "xvvvv",
-      "description": "cvcvvccv",
+      "title": "xvvvvggg",
+      "description": "cvcvvccv22222",
       "done": true,
       "dueDate": "2023-10-27T18:06",
-      "updateDate": "2023-10-26 15:41:43",
+      "updateDate": "2023-10-27 08:22:48",
       "id": 1
-    },
-    {
-      "creationDate": "2023-10-26 15:09:20",
-      "title": "fhfgddd2233",
-      "description": "hffhfhfh",
-      "done": true,
-      "dueDate": "2023-10-11T18:12",
-      "updateDate": "2023-10-26 15:27:09",
-      "id": 3
     }
   ]
 }

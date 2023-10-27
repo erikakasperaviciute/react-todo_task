@@ -23,13 +23,16 @@ function TodoPage() {
   const newTodoHandler = async (newTodo) => {
     if (editTodo) {
       console.log(editTodo);
-      await axios.put(`${API_URL}/todos/${editTodo.id}`, newTodo);
+      const { data } = await axios.put(
+        `${API_URL}/todos/${editTodo.id}`,
+        newTodo
+      );
       console.log(editTodo.id);
       setTodos((prevTodos) => {
         const editId = editTodo.id;
         const editIndex = todos.findIndex((todo) => todo.id === editId);
         const newState = [...prevTodos];
-        newState[editIndex] = newTodo;
+        newState[editIndex] = data;
         return newState;
       });
       setEditTodo(null);
